@@ -800,4 +800,225 @@ class LegalModal {
 // Initialize Legal Modal
 document.addEventListener('DOMContentLoaded', () => {
     new LegalModal();
+    initStickyCta();
+    initExitIntent();
+    initUrgencySystem();
+    initPersonalization();
 });
+
+// Sticky CTA Bar
+function initStickyCta() {
+    const stickyCta = document.getElementById('stickyCta');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        const heroHeight = document.querySelector('.hero').offsetHeight;
+
+        // Mostrar após hero + 300px de scroll
+        if (scrolled > heroHeight + 300) {
+            stickyCta.classList.add('visible');
+        } else {
+            stickyCta.classList.remove('visible');
+        }
+
+        lastScroll = scrolled;
+    });
+
+    // Track click no sticky CTA
+    stickyCta.querySelector('.btn-sticky')?.addEventListener('click', () => {
+        trackMetaPixelEvent('InitiateCheckout', {
+            content_name: 'Sticky CTA Bar',
+            content_category: 'Persistent CTA',
+            value: 0,
+            currency: 'BRL'
+        });
+
+        trackMetaPixelCustomEvent('StickyCTAClick', {
+            scroll_depth: Math.round((window.scrollY / document.documentElement.scrollHeight) * 100)
+        });
+    });
+}
+
+// Exit Intent Popup
+function initExitIntent() {
+    let exitIntentShown = localStorage.getItem('exitIntentShown');
+    const modal = document.getElementById('exitIntentModal');
+    const closeBtn = modal.querySelector('.exit-close');
+
+    // Não mostrar se já foi exibido nesta sessão
+    if (exitIntentShown === 'true') return;
+
+    let exitIntentTriggered = false;
+
+    // Detectar movimento para sair da página
+    document.addEventListener('mouseleave', (e) => {
+        if (e.clientY < 0 && !exitIntentTriggered && window.scrollY > 500) {
+            exitIntentTriggered = true;
+            showExitIntent();
+        }
+    });
+
+    // Mobile: detectar intent de fechar (scroll rápido para cima no topo)
+    let lastScrollTime = Date.now();
+    let lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+        const now = Date.now();
+        const currentScrollY = window.scrollY;
+        const scrollSpeed = Math.abs(currentScrollY - lastScrollY) / (now - lastScrollTime);
+
+        // Se scroll rápido para cima perto do topo
+        if (currentScrollY < 100 && scrollSpeed > 2 && !exitIntentTriggered) {
+            exitIntentTriggered = true;
+            setTimeout(() => {
+                if (window.scrollY < 100) {
+                    showExitIntent();
+                }
+            }, 800);
+        }
+
+        lastScrollTime = now;
+        lastScrollY = currentScrollY;
+    });
+
+    function showExitIntent() {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        localStorage.setItem('exitIntentShown', 'true');
+
+        // Track event
+        trackMetaPixelCustomEvent('ExitIntentShown', {
+            time_on_page: Math.floor((Date.now() - pageLoadTime) / 1000),
+            scroll_depth: Math.round((window.scrollY / document.documentElement.scrollHeight) * 100)
+        });
+    }
+
+    // Fechar modal
+    closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+
+    // Fechar ao clicar fora
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Track click no CTA do exit intent
+    modal.querySelector('.exit-cta')?.addEventListener('click', () => {
+        trackMetaPixelEvent('Lead', {
+            content_name: 'Exit Intent Coupon',
+            content_category: 'Lead Generation',
+            value: 10,
+            currency: 'BRL'
+        });
+    });
+}
+
+// Copy coupon code
+function copyCoupon() {
+    const code = document.getElementById('couponCode').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+        const copyBtn = document.querySelector('.code-copy');
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = '✓ Copiado!';
+        copyBtn.style.background = '#4CAF50';
+
+        setTimeout(() => {
+            copyBtn.textContent = originalText;
+            copyBtn.style.background = '';
+        }, 2000);
+
+        // Track copy
+        trackMetaPixelCustomEvent('CouponCopied', {
+            coupon_code: code
+        });
+    });
+}
+
+// Urgency System - Social Proof dinâmico
+function initUrgencySystem() {
+    const viewersCount = document.getElementById('viewersCount');
+    if (!viewersCount) return;
+
+    // Número base + variação aleatória
+    function updateViewers() {
+        const baseCount = 12;
+        const variation = Math.floor(Math.random() * 8) - 4; // -4 a +4
+        const count = Math.max(8, Math.min(25, baseCount + variation));
+
+        viewersCount.textContent = count;
+    }
+
+    // Atualizar a cada 15-25 segundos
+    setInterval(() => {
+        updateViewers();
+    }, 15000 + Math.random() * 10000);
+
+    // Atualizar imediatamente
+    updateViewers();
+}
+
+// Personalização por horário e contexto
+function initPersonalization() {
+    const hour = new Date().getHours();
+    const heroTitle = document.querySelector('.hero-title');
+    const heroSubtitle = document.querySelector('.hero-subtitle');
+    const mainCta = document.getElementById('heroMainCta');
+
+    // Personalização por período do dia
+    if (hour >= 11 && hour < 14) {
+        // Almoço
+        mainCta.querySelector('.btn-text').innerHTML = 'Pedir Almoço • Chega em 35min';
+        trackMetaPixelCustomEvent('Personalization', {
+            type: 'time_of_day',
+            period: 'lunch'
+        });
+    } else if (hour >= 18 && hour < 22) {
+        // Jantar
+        mainCta.querySelector('.btn-text').innerHTML = 'Pedir Jantar • Chega em 35min';
+        trackMetaPixelCustomEvent('Personalization', {
+            type: 'time_of_day',
+            period: 'dinner'
+        });
+    } else if (hour >= 22 || hour < 6) {
+        // Noite/Madrugada
+        const stickyMessage = document.querySelector('.sticky-message');
+        if (stickyMessage) {
+            stickyMessage.innerHTML = 'Aberto agora! <strong>Entrega em 35min</strong>';
+        }
+    }
+
+    // Detectar visitante recorrente
+    const visits = parseInt(localStorage.getItem('visits') || '0');
+    localStorage.setItem('visits', (visits + 1).toString());
+
+    if (visits > 2) {
+        // Visitante recorrente
+        const urgencyBanner = document.querySelector('.urgency-banner');
+        if (urgencyBanner && Math.random() > 0.5) {
+            urgencyBanner.innerHTML = '<span class="pulse-dot"></span> <strong>Bem-vindo de volta!</strong> Seus favoritos te esperam 😋';
+        }
+
+        trackMetaPixelCustomEvent('Personalization', {
+            type: 'returning_visitor',
+            visit_count: visits
+        });
+    }
+}
+
+// Animação do botão principal
+const heroMainCta = document.getElementById('heroMainCta');
+if (heroMainCta) {
+    heroMainCta.addEventListener('mouseenter', () => {
+        const icon = heroMainCta.querySelector('.btn-icon');
+        icon.style.animation = 'none';
+        setTimeout(() => {
+            icon.style.animation = '';
+        }, 10);
+    });
+}

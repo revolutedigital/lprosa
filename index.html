@@ -172,13 +172,54 @@
                     </div>
                 </div>
                 <div class="hero-cta">
-                    <a href="https://link.vocepede.online/rosaoriental" target="_blank" class="btn btn-primary btn-lg" style="background: var(--primary-light); box-shadow: 0 4px 12px rgba(227, 30, 36, 0.4);">
-                        Quero Meu Sushi em 35 Minutos 🚀
+                    <a href="https://link.vocepede.online/rosaoriental" target="_blank" class="btn btn-primary btn-lg hero-main-cta" id="heroMainCta">
+                        <span class="btn-icon">🍱</span>
+                        <span class="btn-content">
+                            <span class="btn-text">Pedir Agora • Chega em 35min</span>
+                            <small class="btn-subtext">+200 pedidos esta semana</small>
+                        </span>
                     </a>
+                </div>
+
+                <!-- Trust Indicators abaixo do CTA -->
+                <div class="hero-trust-bar">
+                    <div class="trust-indicator">
+                        <span class="trust-icon">🔒</span>
+                        <span class="trust-text">Pagamento Seguro</span>
+                    </div>
+                    <div class="trust-indicator">
+                        <span class="trust-icon">📍</span>
+                        <span class="trust-text">Rastreio em Tempo Real</span>
+                    </div>
+                    <div class="trust-indicator">
+                        <span class="trust-icon">✅</span>
+                        <span class="trust-text">Garantia de Frescor</span>
+                    </div>
+                </div>
+
+                <!-- Urgency Banner -->
+                <div class="urgency-banner" id="urgencyBanner">
+                    <span class="pulse-dot"></span>
+                    <strong id="viewersCount">14</strong> pessoas estão vendo esta página agora
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Sticky CTA Bar -->
+    <div class="sticky-cta-bar" id="stickyCta">
+        <div class="container">
+            <div class="sticky-cta-content">
+                <div class="sticky-cta-text">
+                    <span class="sticky-icon">🍱</span>
+                    <span class="sticky-message">Com fome? <strong>Entrega em 35min</strong></span>
+                </div>
+                <a href="https://link.vocepede.online/rosaoriental" target="_blank" class="btn btn-primary btn-sticky">
+                    Pedir Agora
+                </a>
+            </div>
+        </div>
+    </div>
 
     <!-- Sobre Section -->
     <section id="sobre" class="about" aria-labelledby="about-title">
@@ -585,6 +626,30 @@
                 <button class="modal-close" aria-label="Fechar modal">&times;</button>
             </div>
             <div class="modal-body" id="privacyContent"></div>
+        </div>
+    </div>
+
+    <!-- Exit Intent Popup -->
+    <div id="exitIntentModal" class="modal exit-intent-modal" role="dialog" aria-modal="true">
+        <div class="modal-content exit-intent-content">
+            <button class="modal-close exit-close" aria-label="Fechar">&times;</button>
+            <div class="exit-intent-body">
+                <div class="exit-emoji">😋</div>
+                <h2 class="exit-title">Espera! Não Vai Embora Com Fome...</h2>
+                <p class="exit-subtitle">Ganhe <strong>10% OFF</strong> no seu primeiro pedido!</p>
+                <div class="exit-offer">
+                    <div class="offer-badge">PRIMEIRA COMPRA</div>
+                    <div class="offer-code">
+                        <span class="code-label">Use o cupom:</span>
+                        <span class="code-value" id="couponCode">BEMVINDO10</span>
+                        <button class="code-copy" onclick="copyCoupon()">Copiar</button>
+                    </div>
+                </div>
+                <a href="https://link.vocepede.online/rosaoriental" target="_blank" class="btn btn-primary btn-lg exit-cta">
+                    🎁 Resgatar Desconto Agora
+                </a>
+                <p class="exit-disclaimer">Válido apenas para novos clientes • Pedido mínimo R$ 40</p>
+            </div>
         </div>
     </div>
 
