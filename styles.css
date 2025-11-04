@@ -891,6 +891,52 @@ section {
     text-align: center;
 }
 
+/* Gallery Mini Carousel */
+.gallery-item-carousel {
+    position: relative;
+}
+
+.gallery-mini-carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.gallery-carousel-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 800ms ease-in-out;
+}
+
+.gallery-carousel-img.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+/* Indicador de carrossel na galeria */
+.gallery-item-carousel::after {
+    content: '●●●●';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    opacity: 0.7;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.gallery-item-carousel:hover::after {
+    opacity: 1;
+}
+
 /* Promoções Section */
 .promotions {
     background: var(--bg-light);

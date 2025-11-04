@@ -1022,3 +1022,40 @@ if (heroMainCta) {
         }, 10);
     });
 }
+
+// Gallery Mini Carousel - Auto-rotate
+function initGalleryCarousel() {
+    const carouselContainer = document.querySelector('.gallery-mini-carousel');
+    if (!carouselContainer) return;
+
+    const images = carouselContainer.querySelectorAll('.gallery-carousel-img');
+    if (images.length === 0) return;
+
+    let currentIndex = 0;
+
+    function showNextImage() {
+        // Remove active class from current image
+        images[currentIndex].classList.remove('active');
+
+        // Move to next image
+        currentIndex = (currentIndex + 1) % images.length;
+
+        // Add active class to next image
+        images[currentIndex].classList.add('active');
+    }
+
+    // Auto-rotate every 3 seconds
+    setInterval(showNextImage, 3000);
+
+    // Track carousel view
+    trackMetaPixelCustomEvent('GalleryCarouselView', {
+        total_images: images.length
+    });
+}
+
+// Initialize gallery carousel when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGalleryCarousel);
+} else {
+    initGalleryCarousel();
+}
