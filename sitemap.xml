@@ -73,26 +73,4 @@
 
   </url>
 
-  <!-- Seções da página (âncoras para SEO local) -->
-  <url>
-    <loc>https://rosaorientalsushi.com.br/#sobre</loc>
-    <lastmod>2025-12-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://rosaorientalsushi.com.br/#galeria</loc>
-    <lastmod>2025-12-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://rosaorientalsushi.com.br/#contato</loc>
-    <lastmod>2025-12-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
 </urlset>
