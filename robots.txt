@@ -1,0 +1,91 @@
+# =====================================================
+# Rosa Oriental Sushi - Blumenau, SC
+# robots.txt - Configuração de SEO
+# Última atualização: 2025-12-15
+# =====================================================
+
+# Configuração padrão - Permitir todos os crawlers
+User-agent: *
+Allow: /
+Disallow: /node_modules/
+Disallow: /*.json$
+Disallow: /package-lock.json
+Disallow: /server.js
+
+# Google
+User-agent: Googlebot
+Allow: /
+Allow: /FOTOS/
+Allow: /*.webp$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Crawl-delay: 1
+
+# Google Images
+User-agent: Googlebot-Image
+Allow: /
+Allow: /FOTOS/
+Allow: /*.webp$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Facebook
+User-agent: facebookexternalhit
+Allow: /
+
+# WhatsApp (usa facebookexternalhit)
+User-agent: WhatsApp
+Allow: /
+
+# Instagram
+User-agent: Instagram
+Allow: /
+
+# Twitter
+User-agent: Twitterbot
+Allow: /
+
+# Pinterest
+User-agent: Pinterest
+Allow: /
+Allow: /FOTOS/
+
+# LinkedIn
+User-agent: LinkedInBot
+Allow: /
+
+# Bloquear bots maliciosos conhecidos
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Sitemap
+Sitemap: https://rosaoriental.com.br/sitemap.xml
+
+# =====================================================
+# Informações do Negócio (para referência)
+# =====================================================
+# Nome: Rosa Oriental Sushi
+# Endereço: Rua Dr. Pedro Zimmermann, 6273
+# Bairro: Itoupava Central
+# Cidade: Blumenau - SC
+# CEP: 89068-005
+# Telefone: (47) 98854-5145
+# Instagram: @rosaorientalsushi
+# Horário: Terça a Domingo, 18h às 23h
+# =====================================================
