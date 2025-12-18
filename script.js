@@ -801,7 +801,6 @@ class LegalModal {
 document.addEventListener('DOMContentLoaded', () => {
     new LegalModal();
     initStickyCta();
-    initExitIntent();
     initUrgencySystem();
     initPersonalization();
 });
@@ -840,105 +839,6 @@ function initStickyCta() {
     });
 }
 
-// Exit Intent Popup
-function initExitIntent() {
-    let exitIntentShown = localStorage.getItem('exitIntentShown');
-    const modal = document.getElementById('exitIntentModal');
-    const closeBtn = modal.querySelector('.exit-close');
-
-    // Não mostrar se já foi exibido nesta sessão
-    if (exitIntentShown === 'true') return;
-
-    let exitIntentTriggered = false;
-
-    // Detectar movimento para sair da página
-    document.addEventListener('mouseleave', (e) => {
-        if (e.clientY < 0 && !exitIntentTriggered && window.scrollY > 500) {
-            exitIntentTriggered = true;
-            showExitIntent();
-        }
-    });
-
-    // Mobile: detectar intent de fechar (scroll rápido para cima no topo)
-    let lastScrollTime = Date.now();
-    let lastScrollY = window.scrollY;
-
-    window.addEventListener('scroll', () => {
-        const now = Date.now();
-        const currentScrollY = window.scrollY;
-        const scrollSpeed = Math.abs(currentScrollY - lastScrollY) / (now - lastScrollTime);
-
-        // Se scroll rápido para cima perto do topo
-        if (currentScrollY < 100 && scrollSpeed > 2 && !exitIntentTriggered) {
-            exitIntentTriggered = true;
-            setTimeout(() => {
-                if (window.scrollY < 100) {
-                    showExitIntent();
-                }
-            }, 800);
-        }
-
-        lastScrollTime = now;
-        lastScrollY = currentScrollY;
-    });
-
-    function showExitIntent() {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        localStorage.setItem('exitIntentShown', 'true');
-
-        // Track event
-        trackMetaPixelCustomEvent('ExitIntentShown', {
-            time_on_page: Math.floor((Date.now() - pageLoadTime) / 1000),
-            scroll_depth: Math.round((window.scrollY / document.documentElement.scrollHeight) * 100)
-        });
-    }
-
-    // Fechar modal
-    closeBtn.addEventListener('click', () => {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-    });
-
-    // Fechar ao clicar fora
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
-
-    // Track click no CTA do exit intent
-    modal.querySelector('.exit-cta')?.addEventListener('click', () => {
-        trackMetaPixelEvent('Lead', {
-            content_name: 'Exit Intent Coupon',
-            content_category: 'Lead Generation',
-            value: 10,
-            currency: 'BRL'
-        });
-    });
-}
-
-// Copy coupon code
-function copyCoupon() {
-    const code = document.getElementById('couponCode').textContent;
-    navigator.clipboard.writeText(code).then(() => {
-        const copyBtn = document.querySelector('.code-copy');
-        const originalText = copyBtn.textContent;
-        copyBtn.textContent = '✓ Copiado!';
-        copyBtn.style.background = '#4CAF50';
-
-        setTimeout(() => {
-            copyBtn.textContent = originalText;
-            copyBtn.style.background = '';
-        }, 2000);
-
-        // Track copy
-        trackMetaPixelCustomEvent('CouponCopied', {
-            coupon_code: code
-        });
-    });
-}
 
 // Urgency System - Social Proof dinâmico
 function initUrgencySystem() {
